@@ -1,0 +1,20 @@
+alcoholic nightmare
+
+cancell button при полном инвентаре
+
+Spikes
+	Wood 1
+	Metal 2
+Crossbow
+	Metal 1
+	Wood 2
+	Rope 1
+Gun
+	Wood 1
+	Metal 2
+	Powder 1
+
+Dynamite
+	Paper 2
+	Powder 1
+	Rope 1
