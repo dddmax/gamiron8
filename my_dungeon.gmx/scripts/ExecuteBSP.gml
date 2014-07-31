@@ -1,8 +1,8 @@
 // Define variables
 bsp_splitcount = 6;             // Amount of splits (Don't split too many times, you're still limited to grid size)
-bsp_xsize = 256;                // Grid width
-bsp_ysize = 128;                // Grid height
-bsp_tilesize = 4;               // Size per tile (graphics only)
+bsp_xsize = 80;                // Grid width 256
+bsp_ysize = 60;                // Grid height 128
+bsp_tilesize = 32;               // Size per tile (graphics only)
 bsp_range_min = 0.3;            // Min split factor (scale 0 - 1)
 bsp_range_max = 0.7;            // Max split factor (scale 0 - 1)
 bsp_room_size_min = 0.75;       // Min room size factor (scale 0 - 1) (keep 0.5 as the lowest value)
@@ -32,7 +32,7 @@ begin
             i.ymin = ymin;
             i.xmax = xmin + round((xmax-xmin)*factor); 
             i.ymax = ymax;
-            i.factor = random_range(Control.bsp_range_min, Control.bsp_range_max);
+            i.factor = random_range(obj_control.bsp_range_min, obj_control.bsp_range_max);
             if (i.xmax-i.xmin)/(i.ymax-i.ymin) >= 1 then i.orient = 0 else i.orient = 1;
             // The line above is to check the aspect ratio of the created leaf, and split it the right direction. 
             // This prevents from creating very thin leafs.
@@ -42,7 +42,7 @@ begin
             i.ymin = ymin;
             i.xmax = xmax; 
             i.ymax = ymax;                 
-            i.factor = random_range(Control.bsp_range_min, Control.bsp_range_max); 
+            i.factor = random_range(obj_control.bsp_range_min, obj_control.bsp_range_max); 
             if (i.xmax-i.xmin)/(i.ymax-i.ymin) >= 1 then i.orient = 0 else i.orient = 1;
         end;
         else
@@ -52,7 +52,7 @@ begin
             i.ymin = ymin;
             i.xmax = xmax;
             i.ymax = ymin + round((ymax-ymin)*factor);
-            i.factor = random_range(Control.bsp_range_min, Control.bsp_range_max);
+            i.factor = random_range(obj_control.bsp_range_min, obj_control.bsp_range_max);
             if (i.xmax-i.xmin)/(i.ymax-i.ymin) >= 1 then i.orient = 0 else i.orient = 1;
             
             i = instance_create(0, 0, bsp);
@@ -60,7 +60,7 @@ begin
             i.ymin = ymin + round((ymax-ymin)*factor);
             i.xmax = xmax; 
             i.ymax = ymax;                 
-            i.factor = random_range(Control.bsp_range_min, Control.bsp_range_max); 
+            i.factor = random_range(obj_control.bsp_range_min, obj_control.bsp_range_max); 
             if (i.xmax-i.xmin)/(i.ymax-i.ymin) >= 1 then i.orient = 0 else i.orient = 1; 
         end;  
         
@@ -73,11 +73,11 @@ end;
 bsp_count = 0;
 with bsp
 begin
-    Control.bsp_count += 1;
-    Control.bsp_array_xmin[Control.bsp_count] = xmin;
-    Control.bsp_array_ymin[Control.bsp_count] = ymin;
-    Control.bsp_array_xmax[Control.bsp_count] = xmax;
-    Control.bsp_array_ymax[Control.bsp_count] = ymax;
+    obj_control.bsp_count += 1;
+    obj_control.bsp_array_xmin[obj_control.bsp_count] = xmin;
+    obj_control.bsp_array_ymin[obj_control.bsp_count] = ymin;
+    obj_control.bsp_array_xmax[obj_control.bsp_count] = xmax;
+    obj_control.bsp_array_ymax[obj_control.bsp_count] = ymax;
     instance_destroy();
 end;
 
@@ -108,7 +108,7 @@ begin
     ds_grid_set_region(bsp_grid, bsp_room_xmin[i], bsp_room_ymin[i], bsp_room_xmax[i]-1, bsp_room_ymax[i]-1, 1);
 end;
 //******************************************************************************************************************
-// Create default variables that help "linking" the rooms by placing corridors between them
+
 for(i=2; i<=bsp_count; i+=1)
 {    
     centr_x1 = bsp_room_xmin[i] + (bsp_room_xmax[i] - bsp_room_xmin[i] -1)div 2;
@@ -149,9 +149,10 @@ for(i=2; i<=bsp_count; i+=1)
 //******************************************************************************************************************
 
 // Draw all data to surface -- this is done to not totally rape performance
-surf = surface_create(bsp_xsize*bsp_tilesize, bsp_ysize*bsp_tilesize);
-surface_set_target(surf);
-draw_clear(c_gray);
+//surf = surface_create(bsp_xsize*bsp_tilesize, bsp_ysize*bsp_tilesize);
+//surface_set_target(surf);
+//draw_clear(c_gray);
+
 /*
 // Draw wireframe
 draw_set_color(c_dkgray);
@@ -179,29 +180,7 @@ begin
     draw_rectangle(bsp_array_xmin[i]*bsp_tilesize, bsp_array_ymin[i]*bsp_tilesize, bsp_array_xmax[i]*bsp_tilesize-1, bsp_array_ymax[i]*bsp_tilesize-1, 1);
 end;
 */
-// Draw rooms and corridors
-xx = -1;
-repeat bsp_xsize
-begin
-    xx += 1;
-    yy = -1;
-    repeat bsp_ysize
-    begin
-        yy += 1;
-        
-        if ds_grid_get(bsp_grid, xx, yy) = 1
-        begin
-            draw_set_color(c_black);
-            draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
-        end;
-        
-        if ds_grid_get(bsp_grid, xx, yy) = 2
-        begin
-            draw_set_color(c_red);
-            draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
-        end;
-    end;
-end;
+
 /*
 // Create default variables that help "linking" the rooms by placing corridors between them
 a = 0;
@@ -272,6 +251,64 @@ begin
     end;
 end;
 */
+
+/*
+        if (global.map_tile[xx, yy] == TILE_NONE) {tile_add(til_wall, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);}; 
+        if (global.map_tile[xx, yy] == TILE_ROOM_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};          
+        if (global.map_tile[xx, yy] == TILE_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};   
+        if (global.map_tile[xx, yy] == TILE_ROOM_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_room_wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};
+        if (global.map_tile[xx, yy] == TILE_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};  
+        if (global.map_tile[xx, yy] == TILE_DOOR) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_door); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};     
+*/ 
+randomize();
+
+//player in first room
+centr_x1 = bsp_room_xmin[1] + (bsp_room_xmax[1] - bsp_room_xmin[1] -1)div 2;
+centr_y1 = bsp_room_ymin[1] + (bsp_room_ymax[1] - bsp_room_ymin[1] -1)div 2;
+instance_create(centr_x1*bsp_tilesize+(bsp_tilesize div 2), centr_y1*bsp_tilesize+(bsp_tilesize div 2), obj_player);
+
+//Enemies 50 times
+for(i=0; i<50; i+=1)
+{
+    a = irandom(bsp_xsize - 4) + 2;
+    b = irandom(bsp_ysize - 4) + 2;
+    if (ds_grid_get(bsp_grid, a, b) == 1) instance_create(a*bsp_tilesize+(bsp_tilesize div 2), b*bsp_tilesize+(bsp_tilesize div 2), obj_enemy);
+}
+
+//Items 50 times
+for(i=0; i<50; i+=1)
+{
+    a = irandom(bsp_xsize - 4) + 2;
+    b = irandom(bsp_ysize - 4) + 2;
+    //if (ds_grid_get(bsp_grid, a, b) == 1) instance_create(a*bsp_tilesize, b*bsp_tilesize, obj_wood);
+}
+
+// Draw rooms and corridors
+xx = -1;
+repeat bsp_xsize
+begin
+    xx += 1;
+    yy = -1;
+    repeat bsp_ysize
+    begin
+        yy += 1;
+        
+        if ds_grid_get(bsp_grid, xx, yy) == 1
+        begin
+            tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);
+            //draw_set_color(c_black);
+            //draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
+        end;
+        
+        if ds_grid_get(bsp_grid, xx, yy) == 2
+        begin
+            instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall);
+            //draw_set_color(c_red);
+            //draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
+        end;
+    end;
+end;
+/*
 // Draw numbers on rooms
 draw_set_color(c_white);
 draw_set_halign(fa_center);
@@ -285,6 +322,6 @@ begin
     
     draw_text(((bsp_room_xmin[i]+bsp_room_xmax[i])/2)*bsp_tilesize, ((bsp_room_ymin[i]+bsp_room_ymax[i])/2)*bsp_tilesize, i);
 end;
-
-surface_reset_target();
+*/
+//surface_reset_target();
 
