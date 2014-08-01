@@ -68,19 +68,8 @@
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <scripts name="BSP_Generator">
-      <script>scripts\ControlCreate.gml</script>
-      <script>scripts\ControlDraw.gml</script>
-      <script>scripts\ControlStep.gml</script>
-      <script>scripts\ExecuteBSP.gml</script>
-      <script>scripts\ExecuteBSP_old.gml</script>
-    </scripts>
     <scripts name="Generator">
-      <script>scripts\scr_generator.gml</script>
-      <script>scripts\scr_ChekForPlace.gml</script>
-      <script>scripts\scr_ConnectRooms.gml</script>
-      <script>scripts\scr_PlaceRoom.gml</script>
-      <script>scripts\scr_Zapolnyator.gml</script>
+      <script>scripts\scr_BSP_generator.gml</script>
     </scripts>
     <script>scripts\scr_get_angle_difference.gml</script>
     <script>scripts\scr_smooth_angle.gml</script>
@@ -116,7 +105,6 @@
       <object>objects\obj_player</object>
     </objects>
     <objects name="BSP_Generator">
-      <object>objects\Control</object>
       <object>objects\bsp</object>
     </objects>
   </objects>

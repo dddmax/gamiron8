@@ -8,6 +8,36 @@
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
+    <event eventtype="0" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>map_w = obj_control.bsp_xsize;
+map_h = obj_control.bsp_ysize;
+tile_s = 6; //obj_control.bsp_tilesize;
+
+mini_w = (map_w+1)*tile_s;
+mini_h = (map_h+1)*tile_s;
+
+mini_map = false;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="73">
       <action>
         <libid>1</libid>
@@ -25,44 +55,88 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>dx_mini = view_xview + 10;
-dy_mini = view_yview + 400;
+            <string>dx_mini = view_xview + 50;
+dy_mini = view_yview + 90;
 
-var TILE_NONE = 0;
-var TILE_FLOOR = 1;
-var TILE_WALL = 2;
-var TILE_ROOM_FLOOR = 3;
-var TILE_ROOM_WALL = 4;
-var TILE_DOOR = 5;
-//global.MAP_W = 80;
-//global.MAP_H = 60;
-//argum1 = (global.MAP_W / room_width) * room_height;
+
 
 //draw it on the screen(view[0])
-
-draw_set_color(c_black);
-draw_rectangle(dx_mini, dy_mini, dx_mini + global.MAP_W, dy_mini + global.MAP_H, 1);
-
-for(i=0; i&lt;global.MAP_W; i+=1)
-for(j=0; j&lt;global.MAP_H; j+=1)
+if(!mini_map)
 {
+    draw_set_color(c_black);
+    draw_rectangle(dx_mini, dy_mini, dx_mini + mini_w, dy_mini + mini_h, 0);
+
+//j=0;
+//for(i=0; i&lt;map_w; i+=1)
+//draw_rectangle(dx_mini+i*tile_s, dy_mini+j*tile_s, dx_mini+(i+tile_s)*tile_s, dy_mini+(j+tile_s)*tile_s, 0); 
+
+for(i=0; i&lt;map_w; i+=1)
+for(j=0; j&lt;map_h; j+=1)
+{   
+/* 
+    draw_set_color(c_dkgray);
+    if (ds_grid_get(obj_control.bsp_grid, i, j)==1)
+        draw_rectangle(dx_mini+i*tile_s, dy_mini+j*tile_s, dx_mini+(i+tile_s)*tile_s, dy_mini+(j+tile_s)*tile_s, 0); 
+   */
+       
+    switch (ds_grid_get(obj_control.bsp_grid, i, j))
+    {
+        case 1: 
+            draw_set_color(c_dkgray);             
+        break;
+        case 2: 
+            draw_set_color(c_black);             
+        break; 
+        default: draw_set_color(c_black);
+    } 
+    draw_rectangle(dx_mini+i*tile_s, dy_mini+j*tile_s, dx_mini+(i*tile_s)+tile_s, dy_mini+(j*tile_s)+tile_s, 0);   
+       
+    //if (global.map_tile[i, j] == TILE_DOOR) draw_set_color(c_teal);
+        
     
-    if (global.map_tile[i, j] == TILE_NONE) draw_set_color(c_black);    
-    if (global.map_tile[i, j] == TILE_ROOM_FLOOR)  draw_set_color(c_dkgray);      
-    if (global.map_tile[i, j] == TILE_FLOOR) draw_set_color(c_dkgray);
-    if (global.map_tile[i, j] == TILE_ROOM_WALL) draw_set_color(c_gray);
-    if (global.map_tile[i, j] == TILE_WALL) draw_set_color(c_gray);
-    if (global.map_tile[i, j] == TILE_DOOR) draw_set_color(c_teal);
-    draw_point(dx_mini + i, dy_mini + j);
-    
-    
-    draw_set_color(c_red);
+    draw_set_color(c_green);
     //draw_point(dx_mini + ((obj_player.x / room_width) * global.MAP_W), dy_mini + ((obj_player.y / room_height) * global.MAP_H));
-    draw_point(dx_mini + obj_player.x*global.MAP_W*32/160, dy_mini + obj_player.y*global.MAP_H*32/120);
-     
+    //draw_point(dx_mini + obj_player.x*map_w*tile_s/mini_w, dy_mini + obj_player.y*map_h*tile_s/mini_h); 
+    player_mini_x = (obj_player.x div 32); //obj_player.x/(room_width*mini_w);
+    player_mini_y = (obj_player.y div 32);//obj_player.y/(room_height*mini_h);
+    draw_rectangle(dx_mini + player_mini_x*tile_s, dy_mini + player_mini_y*tile_s,
+        dx_mini + player_mini_x*tile_s+tile_s, dy_mini + player_mini_y*tile_s+tile_s, 0); 
+        
+    draw_set_color(c_red);   
+    with (obj_enemy)
+    {
+        enemy_mini_x = (obj_enemy.x div 32); 
+        enemy_mini_y = (obj_enemy.y div 32);
+        draw_rectangle(dx_mini + enemy_mini_x*tile_s, dy_mini + enemy_mini_y*tile_s, dx_mini + enemy_mini_x*tile_s+tile_s, dy_mini + enemy_mini_y*tile_s+tile_s, 0);
+    }   
 }
-//draw_sprite(argument1,-1,view_xview + ((x / room_width) * global.MAP_W),
-        //view_yview + ((y / room_height) * global.MAP_H));
+
+}
+draw_text(dx_mini+(mini_w div 2), dy_mini+mini_h, obj_player.x);
+draw_text(dx_mini+mini_w, dy_mini+mini_h, player_mini_x);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="10" enumb="77">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>mini_map = !mini_map;
 </string>
           </argument>
         </arguments>

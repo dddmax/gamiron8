@@ -9,7 +9,7 @@ bsp_room_size_min = 0.75;       // Min room size factor (scale 0 - 1) (keep 0.5 
 bsp_room_size_max = 1;          // Max room size factor (scale 0 - 1)
 bsp_border = 1;                 // Define whether to use a border around the rooms 0 = off, 1 = on
 
-
+randomize();
 
 // Start out with 1 big field -- I'm using objects to represent the leaves because that's easy to program
 i = instance_create(0, 0, bsp);
@@ -148,120 +148,6 @@ for(i=2; i<=bsp_count; i+=1)
 
 //******************************************************************************************************************
 
-// Draw all data to surface -- this is done to not totally rape performance
-//surf = surface_create(bsp_xsize*bsp_tilesize, bsp_ysize*bsp_tilesize);
-//surface_set_target(surf);
-//draw_clear(c_gray);
-
-/*
-// Draw wireframe
-draw_set_color(c_dkgray);
-
-i = -1;
-repeat room_width/bsp_tilesize
-begin
-    i += 1;
-    draw_line(i*bsp_tilesize, 0, i*bsp_tilesize, room_height);
-end;
-
-i = -1;
-repeat room_height/bsp_tilesize
-begin
-    i += 1;
-    draw_line(0, i*bsp_tilesize, room_width, i*bsp_tilesize);
-end;
-
-// Draw original rooms 
-draw_set_color(c_green);
-i = 0;
-repeat bsp_count
-begin
-    i += 1;
-    draw_rectangle(bsp_array_xmin[i]*bsp_tilesize, bsp_array_ymin[i]*bsp_tilesize, bsp_array_xmax[i]*bsp_tilesize-1, bsp_array_ymax[i]*bsp_tilesize-1, 1);
-end;
-*/
-
-/*
-// Create default variables that help "linking" the rooms by placing corridors between them
-a = 0;
-repeat bsp_count
-begin
-    a += 1;
-    
-    bsp_link_xmin[a] = bsp_array_xmin[a];
-    bsp_link_ymin[a] = bsp_array_ymin[a];
-    bsp_link_xmax[a] = bsp_array_xmax[a];
-    bsp_link_ymax[a] = bsp_array_ymax[a];
-    
-    bsp_link_room_xmin[a] = bsp_room_xmin[a];
-    bsp_link_room_ymin[a] = bsp_room_ymin[a];
-    bsp_link_room_xmax[a] = bsp_room_xmax[a];
-    bsp_link_room_ymax[a] = bsp_room_ymax[a];
-end;     
-
-i = 0; // manages skipping
-a = 0; // loops though leafs
-repeat bsp_count
-begin
-    i += 1;
-    a += 1;
-    
-    v1 = a; // room 1
-    v2 = a-1; // room 2
-    v3 = 2 // skipping limit
-    
-    if i = v3
-    begin
-        // The split is horizontal
-        if bsp_link_ymin[v1] = bsp_link_ymin[v2]
-        begin
-            bsp_link_xmin[v1] = min(bsp_link_xmin[v1], bsp_link_xmin[v2]);
-            bsp_link_ymin[v1] = min(bsp_link_ymin[v1], bsp_link_ymin[v2]);
-            bsp_link_xmax[v1] = max(bsp_link_xmax[v1], bsp_link_xmax[v2]);
-            bsp_link_ymax[v1] = max(bsp_link_ymax[v1], bsp_link_ymax[v2]);
-            
-            bsp_link_room_xmin[v1] = min(bsp_link_room_xmin[v1], bsp_link_room_xmin[v2]);
-            bsp_link_room_ymin[v1] = min(bsp_link_room_ymin[v1], bsp_link_room_ymin[v2]);
-            bsp_link_room_xmax[v1] = max(bsp_link_room_xmax[v1], bsp_link_room_xmax[v2]);
-            bsp_link_room_ymax[v1] = max(bsp_link_room_ymax[v1], bsp_link_room_ymax[v2]);
-             
-            draw_set_color(c_white);
-            draw_rectangle(bsp_link_xmin[v1]*bsp_tilesize+v3, bsp_link_ymin[v1]*bsp_tilesize+v3, bsp_link_xmax[v1]*bsp_tilesize-v3, bsp_link_ymax[v1]*bsp_tilesize-v3, 1);
-        end;
-        
-        // The split is vertical
-        if bsp_link_xmin[v1] = bsp_link_xmin[v2]
-        begin
-            bsp_link_xmin[v1] = min(bsp_link_xmin[v1], bsp_link_xmin[v2]);
-            bsp_link_ymin[v1] = min(bsp_link_ymin[v1], bsp_link_ymin[v2]);
-            bsp_link_xmax[v1] = max(bsp_link_xmax[v1], bsp_link_xmax[v2]);
-            bsp_link_ymax[v1] = max(bsp_link_ymax[v1], bsp_link_ymax[v2]);
-            
-            bsp_link_room_xmin[v1] = min(bsp_link_room_xmin[v1], bsp_link_room_xmin[v2]);
-            bsp_link_room_ymin[v1] = min(bsp_link_room_ymin[v1], bsp_link_room_ymin[v2]);
-            bsp_link_room_xmax[v1] = max(bsp_link_room_xmax[v1], bsp_link_room_xmax[v2]);
-            bsp_link_room_ymax[v1] = max(bsp_link_room_ymax[v1], bsp_link_room_ymax[v2]);
-             
-            draw_set_color(c_white);
-            draw_rectangle(bsp_link_xmin[v1]*bsp_tilesize+v3, bsp_link_ymin[v1]*bsp_tilesize+v3, bsp_link_xmax[v1]*bsp_tilesize-v3, bsp_link_ymax[v1]*bsp_tilesize-v3, 1);
-        end;
-
-        // Reset "skipping" variable to be able to detect the next link
-        i = 0;
-    end;
-end;
-*/
-
-/*
-        if (global.map_tile[xx, yy] == TILE_NONE) {tile_add(til_wall, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);}; 
-        if (global.map_tile[xx, yy] == TILE_ROOM_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};          
-        if (global.map_tile[xx, yy] == TILE_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};   
-        if (global.map_tile[xx, yy] == TILE_ROOM_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_room_wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};
-        if (global.map_tile[xx, yy] == TILE_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};  
-        if (global.map_tile[xx, yy] == TILE_DOOR) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_door); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};     
-*/ 
-randomize();
-
 //player in first room
 centr_x1 = bsp_room_xmin[1] + (bsp_room_xmax[1] - bsp_room_xmin[1] -1)div 2;
 centr_y1 = bsp_room_ymin[1] + (bsp_room_ymax[1] - bsp_room_ymin[1] -1)div 2;
@@ -283,7 +169,18 @@ for(i=0; i<50; i+=1)
     //if (ds_grid_get(bsp_grid, a, b) == 1) instance_create(a*bsp_tilesize, b*bsp_tilesize, obj_wood);
 }
 
+//minimap
+instance_create(0, 0, obj_minimap);
+
 // Draw rooms and corridors
+/*
+if (global.map_tile[xx, yy] == TILE_NONE) {tile_add(til_wall, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);}; 
+if (global.map_tile[xx, yy] == TILE_ROOM_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};          
+if (global.map_tile[xx, yy] == TILE_FLOOR) {tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);};   
+if (global.map_tile[xx, yy] == TILE_ROOM_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_room_wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};
+if (global.map_tile[xx, yy] == TILE_WALL) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};  
+if (global.map_tile[xx, yy] == TILE_DOOR) instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_door); //{tile_add(til_wall, 0, 0, 32, 32, xx*32, yy*32, 0);};     
+*/ 
 xx = -1;
 repeat bsp_xsize
 begin
@@ -295,19 +192,16 @@ begin
         
         if ds_grid_get(bsp_grid, xx, yy) == 1
         begin
-            tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);
-            //draw_set_color(c_black);
-            //draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
+            tile_add(til_floor, 0, 0, bsp_tilesize, bsp_tilesize, xx*bsp_tilesize, yy*bsp_tilesize, 100);            
         end;
         
         if ds_grid_get(bsp_grid, xx, yy) == 2
         begin
-            instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall);
-            //draw_set_color(c_red);
-            //draw_rectangle(xx*bsp_tilesize, yy*bsp_tilesize, (xx+1)*bsp_tilesize, (yy+1)*bsp_tilesize, 0);
+            instance_create(xx*bsp_tilesize, yy*bsp_tilesize, obj_Wall);            
         end;
     end;
 end;
+
 /*
 // Draw numbers on rooms
 draw_set_color(c_white);
