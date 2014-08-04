@@ -105,9 +105,10 @@ for(j=0; j&lt;map_h; j+=1)
     draw_set_color(c_red);   
     with (obj_enemy)
     {
-        enemy_mini_x = (obj_enemy.x div 32); 
-        enemy_mini_y = (obj_enemy.y div 32);
-        draw_rectangle(dx_mini + enemy_mini_x*tile_s, dy_mini + enemy_mini_y*tile_s, dx_mini + enemy_mini_x*tile_s+tile_s, dy_mini + enemy_mini_y*tile_s+tile_s, 0);
+        enemy_mini_x = x div 32; 
+        enemy_mini_y = y div 32;
+        draw_rectangle(obj_minimap.dx_mini + enemy_mini_x*obj_minimap.tile_s, obj_minimap.dy_mini + enemy_mini_y*obj_minimap.tile_s, 
+            obj_minimap.dx_mini + enemy_mini_x*obj_minimap.tile_s+obj_minimap.tile_s, obj_minimap.dy_mini + enemy_mini_y*obj_minimap.tile_s+obj_minimap.tile_s, 0);
     }   
 }
 
