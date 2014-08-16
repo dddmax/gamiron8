@@ -3,7 +3,7 @@
   <Configs name="configs">
     <Config>Configs\Default</Config>
   </Configs>
-  <datafiles number="1" name="datafiles">
+  <datafiles number="2" name="datafiles">
     <datafile>
       <name>traps.txt</name>
       <exists>-1</exists>
@@ -20,6 +20,23 @@
         </Config>
       </ConfigOptions>
       <filename>traps.txt</filename>
+    </datafile>
+    <datafile>
+      <name>genBearLib.txt</name>
+      <exists>-1</exists>
+      <size>0</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>genBearLib.txt</filename>
     </datafile>
   </datafiles>
   <NewExtensions/>
@@ -75,6 +92,9 @@
     <script>scripts\scr_smooth_angle.gml</script>
     <script>scripts\scr_Button.gml</script>
     <script>scripts\scr_Mouse_In_Rect.gml</script>
+    <scripts name="Bear">
+      <script>scripts\scr_City_create.gml</script>
+    </scripts>
   </scripts>
   <objects name="objects">
     <object>objects\obj_inv</object>
@@ -111,6 +131,10 @@
   <rooms name="rooms">
     <room>rooms\room0</room>
   </rooms>
+  <constants number="2">
+    <constant name="GM_build_date">0</constant>
+    <constant name="GM_version">0</constant>
+  </constants>
   <help>
     <rtf>help.rtf</rtf>
   </help>
