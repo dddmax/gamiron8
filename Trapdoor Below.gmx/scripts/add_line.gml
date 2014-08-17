@@ -1,0 +1,9 @@
+global.message_box[8]=global.message_box[7]
+global.message_box[7]=global.message_box[6]
+global.message_box[6]=global.message_box[5]
+global.message_box[5]=global.message_box[4]
+global.message_box[4]=global.message_box[3]
+global.message_box[3]=global.message_box[2]
+global.message_box[2]=global.message_box[1]
+global.message_box[1]=global.message_box[0]          
+global.message_box[0]=argument0
