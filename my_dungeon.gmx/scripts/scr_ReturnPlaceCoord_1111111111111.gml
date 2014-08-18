@@ -3,11 +3,11 @@
 
 minvalue = argument0;
 maxvalue = argument1;
-nx = argument2;
-ny = argument3;
-lenx = argument4;
-leny = argument5;
 
+nx = 0;
+ny = 0;
+lenx = 0;
+leny = 0;
 res = false;
 
 count=0;
@@ -32,5 +32,11 @@ if (count<=100)
     leny=newy;
     res=true;
 }
-return (res);
+tmp[0] = res;
+tmp[1] = nx;
+tmp[2] = ny;
+tmp[3] = lenx;
+tmp[4] = leny;
+
+return (tmp);
 

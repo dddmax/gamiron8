@@ -13,8 +13,8 @@ free = true;
 for(i=x1; i<x2+1; i+=1)
     for(j=y1; j<y2+1; j+=1)
         if (ds_grid_get(global.map, i, j) != 1 
-            or ds_grid_get(global.map, i, j) != 8
-            or ds_grid_get(global.map, i, j) != 9
+            and ds_grid_get(global.map, i, j) != 8
+            and ds_grid_get(global.map, i, j) != 9
             or ds_grid_get(global.map, i, j) = TILE_HOUSE_FLOOR) then free=false;
 
 return(free); 

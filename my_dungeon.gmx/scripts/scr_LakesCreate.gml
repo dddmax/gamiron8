@@ -11,10 +11,10 @@ density = 0.60;
 xx:=x2-x1+1;
 yy:=y2-y1+1;
 for(i=0; i<round(xx*yy*density)+1; i+=1)
-    then ds_grid_set(global.map, x1+random(xx), y1+random(yy), TILE_CAVE_WALL);
+    ds_grid_set(global.map, x1+random(xx), y1+random(yy), TILE_CAVE_WALL);
     
 for(i=x1; i<x2+1; i+=1)
-for(j=y1; j<y2+1; ;+=1)
+for(j=y1; j<y2+1; j+=1)
 {
     if (i=x1) or (j=x1) or (i=x2) or (j=y2) then
     {
